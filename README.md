@@ -5,12 +5,7 @@ Ta repozitorij vsebuje celotno kodo za spletno aplikacijo za spremljanje osebnih
 ---
 
 ## 1. O projektu
-Aplikacija je namenjena enostavnemu, preglednemu in učinkovitemu spremljanju osebnih izdatkov. Uporabniku omogoča izvajanje vseh osnovnih operacij upravljanja s podatki (CRUD):
-* **Dodajanje novih stroškov** (naziv, znesek, kategorija, datum).
-* **Pregled vseh vnesenih stroškov** v pregledni tabeli.
-* **Urejanje obstoječih vnosov**.
-* **Brisanje stroškov**.
-* **Dodatne funkcionalnosti:** Dinamično filtriranje stroškov po kategorijah ter avtomatski izračun skupne vsote vseh (ali filtriranih) izdatkov.
+Aplikacija je namenjena preglednemu spremljanju osebnih izdatkov in boljšemu razumevanju vsakodnevne porabe. Poudarek je na preprosti uporabi in jasni predstavitvi podatkov, ki uporabniku pomagata ohranjati pregled nad njegovimi stroški.
 
 ---
 
@@ -184,3 +179,27 @@ Da zagotovimo čisto in vzdrževano kodo, se držimo naslednjih pravil:
   * Uporabljajo se funkcijske komponente z React Hooki (`useState`, `useEffect`).
   * Vsi API klici (`fetch`) morajo biti zaviti v `try/catch` bloke za varno obravnavo napak.
   * Komponente morajo biti odzivne in imeti ustrezno obravnavo stanja ob praznih podatkih.
+
+---
+
+## 7. Vizija projekta
+
+### Opis rešitve
+
+Vizija projekta je razviti preprosto spletno aplikacijo, ki predvsem študentom in drugim uporabnikom pomaga ohranjati pregled nad vsakodnevnimi izdatki brez potrebe po plačljivih in zapletenih računovodskih programih. Stroški so zbrani v enotni evidenci z nazivom, zneskom, kategorijo in datumom, uporabnik pa jih lahko sproti dopolnjuje, popravlja in pregleduje ter tako lažje spremlja svojo porabo.
+
+#### Ključne funkcionalnosti
+
+   * **Dodajanje stroškov:** vnos naziva, zneska, kategorije in datuma posameznega izdatka.
+   * **Pregled stroškov:** prikaz vnesenih stroškov v pregledni tabeli.
+   * **Urejanje stroškov:** popravljanje napačnih ali dopolnjevanje obstoječih podatkov.
+   * **Brisanje stroškov:** odstranjevanje nepotrebnih ali pomotoma dodanih zapisov.
+   * **Razvrščanje in filtriranje po kategorijah:** označevanje stroškov s kategorijami ter prikaz izdatkov izbrane kategorije.
+   * **Izračun skupne porabe:** samodejni prikaz vsote vseh stroškov oziroma stroškov trenutno izbrane kategorije.
+   * **Trajno shranjevanje:** ohranjanje vnesenih podatkov za poznejši pregled in urejanje.
+
+### Obseg rešitve in morebitne omejitve
+
+Obseg rešitve zajema ročno beleženje osebnih stroškov, njihovo urejanje ter pregled porabe po kategorijah. Aplikacija je namenjena uporabi v spletnem brskalniku in se osredotoča na spremljanje izdatkov, ne na celovito računovodstvo.
+
+Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija ne pridobiva transakcij iz bančnih računov, ne prepoznava podatkov s fotografij računov in ne izvaja pretvorb med valutami.
