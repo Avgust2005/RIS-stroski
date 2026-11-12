@@ -203,3 +203,121 @@ Vizija projekta je razviti preprosto spletno aplikacijo, ki predvsem študentom 
 Obseg rešitve zajema ročno beleženje osebnih stroškov, njihovo urejanje ter pregled porabe po kategorijah. Aplikacija je namenjena uporabi v spletnem brskalniku in se osredotoča na spremljanje izdatkov, ne na celovito računovodstvo.
 
 Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija ne pridobiva transakcij iz bančnih računov, ne prepoznava podatkov s fotografij računov in ne izvaja pretvorb med valutami.
+
+
+---
+
+## 9. Podroben opis primerov uporabe
+
+### Spodaj so podrobno opisani primeri uporabe, ki so dejansko implementirani v trenutni različici aplikacije za spremljanje stroškov.
+
+---
+
+### Primer uporabe: Dodajanje novega stroška
+* **ID:** PU-01
+* **Cilj:** Uporabnik želi vnesti in shraniti nov strošek v sistem, da bo zabeležen v podatkovni bazi in prikazan na seznamu.
+* **Akterji:** Uporabnik (glavni akter), Sistem (sekundarni akter)
+* **Predpogoji:** Uporabnik ima odprto spletno aplikacijo v brskalniku, zaledni sistem (Spring Boot) in podatkovna baza (PostgreSQL) pa delujeta.
+* **Stanje sistema po PU:** Nov zapis o strošku je shranjen v tabeli `stroski` v podatkovni bazi z dodeljenim unikatnim ID-jem, tabela na zaslonu se osveži, obrazec za vnos pa se izprazni.
+* **Scenarij:**
+    1. Uporabnik v zgornjem obrazcu izpolni polja za naziv, znesek, kategorijo in izbere datum stroška.
+    2. Uporabnik klikne na gumb "Dodaj".
+    3. Obličje (React) pošlje HTTP `POST` zahtevek s podatki v obliki JSON na zaledni sistem (`/api/stroski`).
+    4. Zaledni sistem podatke shrani v podatkovno bazo PostgreSQL.
+    5. Aplikacija ponovno pridobi posodobljen seznam stroškov in izprazni vnosna polja obrazca.
+* **Alternativni tokovi:**
+    * **1a. Manjkajoči podatki v obrazcu:** Če uporabnik pusti katerokoli polje prazno in klikne "Dodaj", brskalnik zaradi atributa `required` prepreči oddajo obrazca in uporabnika opozori, naj izpolni manjkajoče polje.
+    * **1b. Vnos neveljavnega zneska:** Če uporabnik v polje za znesek poskuša vnesti besedilo namesto številke, polje tipa `number` tega vnosa ne dovoli.
+* **Izjeme:**
+    * **E1. Zaledni sistem ali baza ni dosegljiva:** Če strežnik ne odgovarja, se strošek ne shrani, napaka pa se zabeleži v konzolo brskalnika (*"Napaka pri shranjevanju"*).
+
+---
+
+### Primer uporabe: Pregled seznama vseh stroškov
+* **ID:** PU-02
+* **Cilj:** Uporabnik želi videti pregledno tabelo vseh svojih doslej shranjenih stroškov skupaj z njihovimi podrobnostmi (ID, naziv, znesek, kategorija, datum).
+* **Akterji:** Uporabnik, Sistem
+* **Predpogoji:** Aplikacija je odprta v brskalniku in povezava z zalednim sistemom deluje.
+* **Stanje sistema po PU:** Stanje podatkovne baze ostane nespremenjeno. Na zaslonu je prikazana tabela s trenutnimi zapisi iz baze.
+* **Scenarij:**
+    1. Uporabnik odpre spletno aplikacijo v brskalniku (ali izvede spremembo podatkov).
+    2. Obličje samodejno sproži HTTP `GET` zahtevek na končno točko `/api/stroski`.
+    3. Zaledni sistem iz podatkovne baze prebere vse zapise iz tabele `stroski` in jih vrne v formatu JSON.
+    4. Obličje prejete podatke izriše v pregledni HTML tabeli.
+* **Alternativni tokovi:**
+    * **4a. V bazi ni shranjenih stroškov:** Če zaledni sistem vrne prazen seznam, aplikacija namesto vrstic s podatki v tabeli prikaže sporočilo *"Ni najdenih stroškov za ta filter."*
+* **Izjeme:**
+    * **E1. Napaka pri pridobivanju podatkov:** Če zaledni sistem vrne napako ali ni zagnan, tabela ostane prazna, v konzolo pa se izpiše *"Napaka pri pridobivanju podatkov"*.
+
+---
+
+### Primer uporabe: Urejanje obstoječega stroška
+* **ID:** PU-03
+* **Cilj:** Uporabnik želi spremeniti podatke (naziv, znesek, kategorijo ali datum) že obstoječega stroška v sistemu.
+* **Akterji:** Uporabnik, Sistem
+* **Predpogoji:** V sistemu obstaja vsaj en shranjen strošek, ki je viden v tabeli na zaslonu.
+* **Stanje sistema po PU:** Obstoječi zapis v podatkovni bazi je posodobljen z novimi vrednostmi (njegov ID ostane enak), tabela in skupni znesek na zaslonu pa se ustrezno posodobita.
+* **Scenarij:**
+    1. Uporabnik v tabeli v vrstici želenega stroška klikne na gumb "Uredi".
+    2. Sistem podatke izbrane vrstice prenese v zgornji obrazec, gumb za potrditev pa se preimenuje iz "Dodaj" v "Posodobi".
+    3. Uporabnik v obrazcu popravi želene vrednosti (npr. spremeni znesek ali kategorijo).
+    4. Uporabnik klikne na gumb "Posodobi".
+    5. Obličje pošlje HTTP `PUT` zahtevek na `/api/stroski/{id}` s popravljenimi podatki.
+    6. Zaledni sistem posodobi zapis v bazi, obličje pa izprazni obrazec in osveži prikazano tabelo.
+* **Alternativni tokovi:**
+    * **3a. Uporabnik ne spremeni nobenega podatka:** Če uporabnik klikne "Posodobi" brez sprememb, sistem vseeno izvede posodobitev z enakimi vrednostmi in ponastavi obrazec v prvotno stanje.
+* **Izjeme:**
+    * **E1. Zapis v bazi ne obstaja več:** Če je bil zapis medtem izbrisan, zaledni sistem vrne izjemo (*"Strošek ni najden!"*), posodobitev pa se ne izvede.
+
+---
+
+### Primer uporabe: Brisanje stroška
+* **ID:** PU-04
+* **Cilj:** Uporabnik želi trajno odstraniti določen zapis stroška iz sistema.
+* **Akterji:** Uporabnik, Sistem
+* **Predpogoji:** V tabeli je prikazan vsaj en strošek.
+* **Stanje sistema po PU:** Izbrani zapis je trajno izbrisan iz podatkovne baze PostgreSQL, vrstica izgine iz tabele na zaslonu, skupni seštevek pa se zmanjša za vrednost izbrisanega stroška.
+* **Scenarij:**
+    1. Uporabnik v tabeli poišče strošek, ki ga želi odstraniti, in v njegovi vrstici klikne rdeč gumb "Izbriši".
+    2. Obličje pošlje HTTP `DELETE` zahtevek na zaledni sistem z ID-jem izbranega stroška (`/api/stroski/{id}`).
+    3. Zaledni sistem izbriše zapis iz podatkovne baze.
+    4. Obličje ponovno pridobi seznam stroškov in izriše osveženo tabelo brez izbrisanega zapisa.
+* **Alternativni tokovi:**
+    * Ni alternativnih tokov (brisanje se izvede neposredno ob kliku brez vmesnega potrditvenega okna).
+* **Izjeme:**
+    * **E1. Napaka pri brisanju:** Če povezava s strežnikom med zahtevo pade, se zapis ne izbriše, v konzolo brskalnika pa se izpiše *"Napaka pri brisanju"*.
+
+---
+
+### Primer uporabe: Filtriranje stroškov po kategoriji
+* **ID:** PU-05
+* **Cilj:** Uporabnik želi na zaslonu prikazati samo stroške, ki spadajo v določeno kategorijo (npr. samo "Hrana"), da ima boljši pregled nad posamezno vrsto izdatkov.
+* **Akterji:** Uporabnik
+* **Predpogoji:** V sistemu so shranjeni stroški z vnesenimi kategorijami.
+* **Stanje sistema po PU:** Stanje podatkovne baze ostane nespremenjeno. Tabela na zaslonu prikazuje le stroške izbrane kategorije, izračunan skupni znesek pa odraža vsoto samo teh filtriranih stroškov.
+* **Scenarij:**
+    1. Uporabnik klikne na spustni seznam (dropdown) z oznako "Filtriraj po kategoriji", ki ga sistem samodejno napolni z unikatnimi kategorijami iz obstoječih stroškov.
+    2. Uporabnik izbere želeno kategorijo s seznama.
+    3. Obličje lokalno filtrira seznam stroškov in v tabeli prikaže le vrstice, katerih kategorija se ujema z izbrano.
+    4. Sistem samodejno preračuna in posodobi prikazani skupni znesek za filtrirane stroške.
+* **Alternativni tokovi:**
+    * **2a. Ponastavitev filtra:** Uporabnik v spustnem seznamu ponovno izbere možnost *"-- Vse kategorije --"*. Sistem odstrani filter in v tabeli znova prikaže vse stroške iz baze.
+* **Izjeme:**
+    * **E1. Zadnji strošek izbrane kategorije je izbrisan:** Če uporabnik izbriše edini strošek v aktivni filtrirani kategoriji, tabela prikaže sporočilo *"Ni najdenih stroškov za ta filter."*
+
+---
+
+### Primer uporabe: Izračun skupnega zneska stroškov
+* **ID:** PU-06
+* **Cilj:** Uporabnik želi takoj videti skupno vsoto vseh trenutno prikazanih stroškov v evrih.
+* **Akterji:** Sistem (glavni akter), Uporabnik (sekundarni akter)
+* **Predpogoji:** Aplikacija je naložena v brskalniku.
+* **Stanje sistema po PU:** Stanje podatkovne baze ostane nespremenjeno. Na zaslonu (desno nad tabelo) je izpisan točen seštevek prikazanih stroškov na dve decimalni mesti natančno.
+* **Scenarij:**
+    1. Sistem pridobi seznam stroškov iz baze ali pa uporabnik izvede spremembo (dodajanje, urejanje, brisanje ali filtriranje).
+    2. Obličje samodejno sešteje vrednosti polja `znesek` vseh stroškov, ki so trenutno vidni v tabeli.
+    3. Sistem izračunani znesek oblikuje na dve decimalni mesti in ga izpiše v zeleni barvi z oznako *"Skupaj: X.XX €"*.
+* **Alternativni tokovi:**
+    * **2a. Seznam prikazanih stroškov je prazen:** Če v bazi ni stroškov ali za izbrani filter ni zadetkov, sistem izpiše *"Skupaj: 0.00 €"*.
+* **Izjeme:**
+    * Ni specifičnih izjem (izračun poteka lokalno v pomnilniku brskalnika).
