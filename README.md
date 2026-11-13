@@ -207,6 +207,13 @@ Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija
 
 ---
 
+## 8. Diagram primerov uporabe
+
+![Diagram primerov uporabe](docs/diagram-pu.drawio.png)
+
+
+---
+
 ## 9. Podroben opis primerov uporabe
 
 ### Spodaj so podrobno opisani primeri uporabe, ki so dejansko implementirani v trenutni različici aplikacije za spremljanje stroškov.
