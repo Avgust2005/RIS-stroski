@@ -6,7 +6,9 @@
 Kot uporabnik želim za izbrani mesec nastaviti in spremeniti skupni proračun, da si postavim jasno omejitev mesečne porabe.
 
 **Odgovorni član:**  Vid Kovač
+
 **Prioriteta:** Visoka
+
 **Ocena zahtevnosti:** 3 / 5
 
 ### Sprejemni kriteriji
