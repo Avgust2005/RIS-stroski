@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import MesecniProracun from './MesecniProracun.jsx';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import autoTable from "jspdf-autotable";
+import autoTable from 'jspdf-autotable';
 
 function App() {
   const [stroski, setStroski] = useState([]);
@@ -159,6 +160,7 @@ function App() {
   return (
       <div style={{ padding: '20px', fontFamily: 'sans-serif', margin: '0 auto' }}>
         <h1>Aplikacija za spremljanje stroškov</h1>
+        <MesecniProracun />
 
         {/* Obrazec za vnos in urejanje */}
         <form onSubmit={handleSubmit} style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
