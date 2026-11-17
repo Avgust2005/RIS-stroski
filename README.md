@@ -330,3 +330,13 @@ Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija
     * **2a. Seznam prikazanih stroškov je prazen:** Če v bazi ni stroškov ali za izbrani filter ni zadetkov, sistem izpiše *"Skupaj: 0.00 €"*.
 * **Izjeme:**
     * Ni specifičnih izjem (izračun poteka lokalno v pomnilniku brskalnika).
+
+---
+
+## 10. Uporabniske zgodbe
+
+Podroben opis uporabniskih zgodb, sprejemnih kriterijev in tehnicnih podrobnosti implementacije se nahaja v locenem dokumentu
+
+*[Uporabniska zgodba 1 (user Stories)](docs/user-stories.md)
+
+*[Uporabniska zgodba 2 (user Stories)](docs/user-stories2.md)
