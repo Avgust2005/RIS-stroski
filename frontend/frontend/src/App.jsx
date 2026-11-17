@@ -1,5 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import MesecniProracun from './MesecniProracun.jsx';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 function App() {
   const [stroski, setStroski] = useState([]);
@@ -83,6 +86,77 @@ function App() {
   // 3. Izračun vsote: Seštejemo zneske samo tistih stroškov, ki so trenutno prikazani
   const skupniZnesek = prikazaniStroski.reduce((vsota, strosek) => vsota + Number(strosek.znesek), 0);
 
+
+  // 1. Izvoz v CSV
+  const izvoziCSV = () => {
+    if (prikazaniStroski.length === 0) return alert("Ni podatkov za izvoz.");
+
+    const glava = ["ID", "Naziv", "Znesek (EUR)", "Kategorija", "Datum"];
+    const vrstice = prikazaniStroski.map(s => [
+      s.id,
+      `"${s.naziv}"`,
+      Number(s.znesek).toFixed(2),
+      `"${s.kategorija}"`,
+      s.datum
+    ]);
+
+    const csvVsebina = [glava.join(";"), ...vrstice.map(e => e.join(";"))].join("\n");
+    const blob = new Blob(["\uFEFF" + csvVsebina], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "stroski.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // 2. Izvoz v XLSX (Excel)
+  const izvoziXLSX = () => {
+    if (prikazaniStroski.length === 0) return alert("Ni podatkov za izvoz.");
+
+    const podatkiZaExcel = prikazaniStroski.map(s => ({
+      ID: s.id,
+      Naziv: s.naziv,
+      "Znesek (€)": Number(s.znesek),
+      Kategorija: s.kategorija,
+      Datum: s.datum
+    }));
+
+    const delovniList = XLSX.utils.json_to_sheet(podatkiZaExcel);
+    const delovniZvezek = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(delovniZvezek, delovniList, "Stroški");
+    XLSX.writeFile(delovniZvezek, "stroski.xlsx");
+  };
+
+  // 3. Izvoz v PDF
+  const izvoziPDF = () => {
+    if (prikazaniStroski.length === 0) return alert("Ni podatkov za izvoz.");
+
+    const doc = new jsPDF();
+    doc.text("Porocilo o stroskih", 14, 15);
+    doc.setFontSize(11);
+    doc.text(`Skupni znesek: ${skupniZnesek.toFixed(2)} EUR`, 14, 22);
+
+    const stolpci = ["ID", "Naziv", "Znesek (EUR)", "Kategorija", "Datum"];
+    const vrstice = prikazaniStroski.map(s => [
+      s.id,
+      s.naziv,
+      Number(s.znesek).toFixed(2),
+      s.kategorija,
+      s.datum
+    ]);
+
+    autoTable(doc, {
+      head: [stolpci],
+      body: vrstice,
+      startY: 28,
+    });
+
+    doc.save("stroski.pdf");
+  };
+
   return (
       <div style={{ padding: '20px', fontFamily: 'sans-serif', margin: '0 auto' }}>
         <h1>Aplikacija za spremljanje stroškov</h1>
@@ -115,6 +189,18 @@ function App() {
             </select>
           </div>
           <h3 style={{ margin: 0, color: '#28a745' }}>Skupaj: {skupniZnesek.toFixed(2)} €</h3>
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button onClick={izvoziCSV} style={{ cursor: 'pointer', padding: '6px 10px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px' }}>
+            Izvozi CSV
+          </button>
+          <button onClick={izvoziXLSX} style={{ cursor: 'pointer', padding: '6px 10px', backgroundColor: '#217346', color: 'white', border: 'none', borderRadius: '4px' }}>
+            Izvozi Excel
+          </button>
+          <button onClick={izvoziPDF} style={{ cursor: 'pointer', padding: '6px 10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px' }}>
+            Izvozi PDF
+          </button>
         </div>
 
         {/* Tabela za prikaz podatkov */}
