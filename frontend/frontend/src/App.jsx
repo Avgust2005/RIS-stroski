@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from "jspdf-autotable";
+import Statistika from './Statistika';
 
 function App() {
   const [stroski, setStroski] = useState([]);
@@ -10,6 +11,7 @@ function App() {
 
   // Novo stanje za shranjevanje izbrane kategorije
   const [filterKategorija, setFilterKategorija] = useState('');
+  const [prikaziStatistiko, setPrikaziStatistiko] = useState(false);
 
   const API_URL = 'http://localhost:8080/api/stroski';
 
@@ -159,6 +161,10 @@ function App() {
   return (
       <div style={{ padding: '20px', fontFamily: 'sans-serif', margin: '0 auto' }}>
         <h1>Aplikacija za spremljanje stroškov</h1>
+        <button onClick={() => setPrikaziStatistiko(!prikaziStatistiko)} style={{ cursor: 'pointer', padding: '6px 12px', marginBottom: '10px' }}>
+          {prikaziStatistiko ? 'Skrij statistiko' : 'Pokaži statistiko'}
+        </button>
+        {prikaziStatistiko && <Statistika stroski={stroski} />}
 
         {/* Obrazec za vnos in urejanje */}
         <form onSubmit={handleSubmit} style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
