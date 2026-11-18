@@ -340,3 +340,5 @@ Podroben opis uporabniskih zgodb, sprejemnih kriterijev in tehnicnih podrobnosti
 *[Uporabniska zgodba 1 (user Stories)](docs/user-stories.md)
 
 *[Uporabniska zgodba 2 (user Stories)](docs/user-stories2.md)
+
+*[Uporabniska zgodba 3 (user Stories)](docs/user-stories3.md)

@@ -1,0 +1,44 @@
+PUT http://localhost:8080/api/proracuni/2026/11
+Content-Type: application/json
+
+{
+  "znesek": 500
+}
+
+### Sprememba novemberskega proračuna
+PUT http://localhost:8080/api/proracuni/2026/11
+Content-Type: application/json
+
+{
+  "znesek": 600
+}
+
+### Pridobivanje novemberskega proračuna
+GET http://localhost:8080/api/proracuni/2026/11
+
+### Znesek nič
+PUT http://localhost:8080/api/proracuni/2026/11
+Content-Type: application/json
+
+{"znesek": 0}
+
+### Negativen znesek
+PUT http://localhost:8080/api/proracuni/2026/11
+Content-Type: application/json
+
+{"znesek": -10}
+
+### Manjkajoč znesek
+PUT http://localhost:8080/api/proracuni/2026/11
+Content-Type: application/json
+
+{"znesek": null}
+
+### Nastavitev decembrskega proračuna
+PUT http://localhost:8080/api/proracuni/2026/12
+Content-Type: application/json
+
+{"znesek": 700}
+
+### Pridobivanje decembrskega proračuna
+GET http://localhost:8080/api/proracuni/2026/12
