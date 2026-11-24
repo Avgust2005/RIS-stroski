@@ -335,4 +335,4 @@ Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija
 
 ## 10. Razredni diagram
 
-![Razredni diagram](docs/razredni_diagram.png)
+![Untitled Diagram.drawio.svg](docs/Untitled%20Diagram.drawio.svg))
