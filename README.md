@@ -336,3 +336,40 @@ Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija
 ## 10. Razredni diagram
 
 ![Untitled Diagram.drawio.svg](docs/Untitled%20Diagram.drawio.svg))
+
+### Opis razredov
+
+#### Strosek
+**Vloga:** Osrednji razred aplikacije. Predstavlja en zabeležen izdatek z nazivom, zneskom, kategorijo in datumom. Iz njega podatke pridobivata tudi razreda Statistika in Izvoz.
+
+**Ključne metode:**
+- `uredi(naziv, znesek, kategorija, datum)` – posodobi podatke obstoječega stroška, npr. ko uporabnik popravi napačen znesek.
+- `izbrisi()` – trajno odstrani strošek iz evidence.
+
+*V kodi:* `Strosek.java`, `StrosekService.java`, `StrosekController.java`.
+
+#### Statistika
+**Vloga:** Za izbrani mesec in leto izračuna, koliko je uporabnik porabil, in porabo prikaže v dveh grafih. Uporabniku pomaga ugotoviti, kdaj in za kaj porabi največ denarja.
+
+**Ključne metode:**
+- `prikaziDnevnoPorabo()` – sešteje stroške za vsak dan izbranega meseca (dnevi brez stroškov imajo vrednost 0) in jih prikaže v stolpčnem grafu.
+- `prikaziPoraboPoKategorijah()` – sešteje stroške po kategorijah, izračuna delež vsake kategorije v skupni porabi in jih prikaže v tortnem grafu.
+
+*V kodi:* `StatistikaService.java` (izračun), `StatistikaController.java`, `Statistika.jsx` (grafa).
+
+#### Izvoz
+**Vloga:** Omogoča, da uporabnik seznam svojih stroškov shrani v datoteko in ga uporablja izven aplikacije. Atribut `format` določa vrsto datoteke.
+
+**Ključne metode:**
+- `UstvariCSV(stroski)` – iz seznama stroškov ustvari datoteko CSV.
+- `UstvariEXCEL(stroski)` – ustvari preglednico Excel s stroški.
+- `UstvariPDF(stroski)` – ustvari poročilo PDF s seznamom stroškov in skupnim zneskom.
+
+*V kodi:* funkcije za izvoz v `App.jsx`.
+
+### Povezave med razredi
+
+- **Dedovanje** (polna črta s praznim trikotnikom): `Administrator` je posebna vrsta `Uporabnika`. Ima vse njegove atribute in metode, poleg tega pa lahko upravlja uporabnike.
+- **Kompozicija** (polna črta s polnim rombom pri uporabniku): `Uporabnik` ima nič ali več stroškov (`0..*`) in nič ali več mesečnih proračunov (`0..*`). Stroški in proračuni brez uporabnika ne obstajajo; če uporabnika izbrišemo, se izbrišejo tudi oni.
+- **Asociacija** (polna črta): `Uporabnik` pregleduje `Statistiko` in izvaža stroške prek razreda `Izvoz`.
+- **Odvisnost** (črtkana črta s puščico): `Prijava` uporabi podatke `Uporabnika` za preverjanje prijave. `Statistika` in `Izvoz` uporabljata podatke iz razreda `Strosek`, vendar stroškov ne hranita.
