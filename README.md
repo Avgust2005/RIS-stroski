@@ -7,7 +7,7 @@ Ta repozitorij vsebuje celotno kodo za spletno aplikacijo za spremljanje osebnih
 ## 1. O projektu
 Aplikacija je namenjena preglednemu spremljanju osebnih izdatkov in boljšemu razumevanju vsakodnevne porabe. Poudarek je na preprosti uporabi in jasni predstavitvi podatkov, ki uporabniku pomagata ohranjati pregled nad njegovimi stroški.
 
-[Uporabniške zgodbe](docs/user-stories.md)
+[Uporabniške zgodbe](docs/UZ/Zgodbe.md)
 
 ---
 
@@ -335,7 +335,7 @@ Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija
 
 ## 10. Razredni diagram
 
-![Untitled Diagram.drawio.svg](docs/Untitled%20Diagram.drawio.svg))
+![Untitled Diagram.drawio.svg](docs/Razredni_diagram.drawio.svg)
 
 ### Opis razredov
 
