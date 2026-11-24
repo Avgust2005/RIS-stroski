@@ -333,12 +333,6 @@ Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija
 
 ---
 
-## 10. Uporabniske zgodbe
+## 10. Razredni diagram
 
-Podroben opis uporabniskih zgodb, sprejemnih kriterijev in tehnicnih podrobnosti implementacije se nahaja v locenem dokumentu
-
-*[Uporabniska zgodba 1 (user Stories)](docs/user-stories.md)
-
-*[Uporabniska zgodba 2 (user Stories)](docs/user-stories2.md)
-
-*[Uporabniska zgodba 3 (user Stories)](docs/user-stories3.md)
+![Razredni diagram](docs/razredni_diagram.png)
