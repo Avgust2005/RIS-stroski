@@ -367,6 +367,44 @@ Pravilnost in popolnost evidence sta odvisni od uporabnikovih vnosov. Aplikacija
 
 *V kodi:* funkcije za izvoz v `App.jsx`.
 
+#### MesecniProracun
+**Vloga:** Predstavlja skupni proračun za izbrani mesec in leto. Uporabniku omogoča določitev in spreminjanje omejitve mesečne porabe.
+
+**Ključne metode:**
+- `nastaviZnesek(znesek)` – nastavi oziroma spremeni višino mesečnega proračuna. Znesek mora biti večji od nič.
+- `opozorilo()` – predstavlja načrtovano opozarjanje uporabnika glede preseganja nastavljenega proračuna.
+
+*V kodi:* `MesecniProracun.java` (podatki), `MesecniProracunService.java` (pridobivanje in shranjevanje), `MesecniProracunController.java` in `MesecniProracun.jsx` (obrazec). Opozorila še niso implementirana.
+
+#### Uporabnik
+**Vloga:** Predstavlja uporabnika aplikacije, ki spremlja svoje stroške in določa mesečne proračune. Z njim so povezani njegovi stroški, proračuni ter dostop do statistike in izvoza podatkov.
+
+**Ključne metode:**
+- `prijaviSe(email, geslo)` – sproži prijavo s podanimi podatki in vrne podatek o njeni uspešnosti.
+- `odjaviSe()` – zaključi uporabnikovo prijavljeno sejo.
+- `dodajStrosek(strosek)` – doda nov strošek v uporabnikovo evidenco.
+- `preglejStroske()` – vrne seznam uporabnikovih stroškov.
+
+*V kodi:* Razred `Uporabnik` in uporabniški računi še niso implementirani. Dodajanje in pregled stroškov trenutno delujeta brez ločevanja podatkov po uporabnikih.
+
+#### Administrator
+**Vloga:** Predstavlja uporabnika z dodatnimi pravicami za upravljanje uporabniških računov. Deduje atribute in metode razreda `Uporabnik` ter jih dopolnjuje z administratorskimi funkcionalnostmi.
+
+**Ključne metode:**
+- `upravljajUporabnike()` – omogoča pregled in upravljanje uporabniških računov.
+- `odstraniUporabnika(uporabnik)` – odstrani izbrani uporabniški račun iz sistema.
+
+*V kodi:* Razred `Administrator` in upravljanje uporabniških računov še nista implementirana.
+
+#### Prijava
+**Vloga:** Skrbi za preverjanje prijavnih podatkov in vzpostavitev uporabnikove seje. Pri preverjanju uporablja podatke uporabniškega računa.
+
+**Ključne metode:**
+- `preveriPodatke()` – preveri vneseni elektronski naslov in geslo ter vrne podatek, ali sta pravilna.
+- `ustvariSejo()` – po uspešnem preverjanju podatkov vzpostavi prijavljeno sejo uporabnika.
+
+*V kodi:* Razred `Prijava` in upravljanje prijavljenih sej še nista implementirana.
+
 ### Povezave med razredi
 
 - **Dedovanje** (polna črta s praznim trikotnikom): `Administrator` je posebna vrsta `Uporabnika`. Ima vse njegove atribute in metode, poleg tega pa lahko upravlja uporabnike.
